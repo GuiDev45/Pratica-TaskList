@@ -1,11 +1,7 @@
 import React from "react";
 import TaskItem from "./TaskItem";
 
-type TaskListProps = {
-  task: string;
-};
-
-function TaskList(props: TaskListProps) {
+function TaskList() {
   const [tasks, setTasks] = React.useState<string[]>([]); // Estado das tarefas
   const [newTask, setNewTask] = React.useState<string>(""); // Nova tarefa a ser adicionada
 
@@ -23,16 +19,6 @@ function TaskList(props: TaskListProps) {
 
   return (
     <div>
-      <div>{props.task}</div>
-      <ul>
-        {tasks.map((task, index) => (
-          <TaskItem
-            key={index}
-            text={task}
-            onDelete={() => deleteTask(index)}
-          />
-        ))}
-      </ul>
       <form onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
@@ -43,6 +29,15 @@ function TaskList(props: TaskListProps) {
           Adicionar Tarefa
         </button>
       </form>
+      <ul>
+        {tasks.map((task, index) => (
+          <TaskItem
+            key={index}
+            text={task}
+            onDelete={() => deleteTask(index)}
+          />
+        ))}
+      </ul>
     </div>
   );
 }
