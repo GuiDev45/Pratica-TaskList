@@ -1,13 +1,17 @@
 type TaskItemProps = {
   text: string;
   onDelete: () => void;
+  onEdit: () => void;
 };
 
-function TaskItem({ text, onDelete }: TaskItemProps) {
+function TaskItem({ text, onDelete, onEdit }: TaskItemProps) {
   return (
     <li>
       {text}
-      <button onClick={onDelete}>Excluir</button>
+      <div>
+        <button onClick={onDelete}>Excluir</button>
+        <button onClick={onEdit}>Editar</button>
+      </div>
     </li>
   );
 }

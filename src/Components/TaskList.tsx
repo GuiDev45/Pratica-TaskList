@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import TaskItem from "./TaskItem";
 
 function TaskList() {
-  const [tasks, setTasks] = React.useState<string[]>([]); // Estado das tarefas
-  const [newTask, setNewTask] = React.useState<string>(""); // Nova tarefa a ser adicionada
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [newTask, setNewTask] = useState<string>("");
+  const [editingIndex, setEditingIndex] = useState<number>(-1);
+  const [editedTask, setEditedTask] = useState<string>("");
 
   const addTask = () => {
     if (newTask.trim() !== "") {
-      setTasks([...tasks, newTask]); // Adiciona nova tarefa ao estado
-      setNewTask(""); // Limpa o campo de entrada
+      setTasks([...tasks, newTask]);
+      setNewTask("");
     }
   };
 
   const deleteTask = (index: number) => {
     const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks); // Remove a tarefa do estado
+    setTasks(newTasks);
+  };
+
+  const editTask = (index: number, newText: string) => {
+    const newTasks = tasks.map((task, i) => (i === index ? newText : task));
+    setTasks(newTasks);
+    setEditingIndex(-1);
+    setEditedTask("");
   };
 
   return (
@@ -31,11 +40,32 @@ function TaskList() {
       </form>
       <ul>
         {tasks.map((task, index) => (
-          <TaskItem
-            key={index}
-            text={task}
-            onDelete={() => deleteTask(index)}
-          />
+          <li key={index}>
+            {editingIndex === index ? (
+              <div>
+                <input
+                  type="text"
+                  value={editedTask}
+                  onChange={(e) => setEditedTask(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => editTask(index, editedTask)}
+                >
+                  Concluir Edição
+                </button>
+              </div>
+            ) : (
+              <TaskItem
+                text={task}
+                onDelete={() => deleteTask(index)}
+                onEdit={() => {
+                  setEditingIndex(index);
+                  setEditedTask(task);
+                }}
+              />
+            )}
+          </li>
         ))}
       </ul>
     </div>
